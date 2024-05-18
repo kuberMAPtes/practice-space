@@ -17,10 +17,28 @@
         const io = SocketIO(server, {path: '/socket.io'});
 
         io.on('connection', function (socket) {
+
             console.log(socket.id, ' connected...');
-                
+
+            // receive a nickname changed
+            var nickname = 'NEWBIE';
+
+            socket.on("nickname", function (data) {
+                console.log("nickname : ", data)
+
+                if(!nickname){
+                    nickname = data;
+                    socket.emit('msg', `${socket.id} has changed nickname as ${nickname}.`)
+                } else {
+                    nickname_past = nickname;
+                    nickname = data;
+
+                    socket.emit('msg', `${nickname_past} has changed nickname as ${nickname}`)
+                }
+            });
+
             // broadcasting a entering message to everyone who is in the chatroom
-            io.emit('msg', `${socket.id} has entered the chatroom.`);
+            io.emit('msg', `NEWBIE (${socket.id}) has entered the chatroom. `);
         
             // message receives
             socket.on('msg', function (data) {
@@ -28,8 +46,8 @@
                 // broadcasting a message to everyone except for the sender
                 socket.broadcast.emit('msg', `${socket.id}: ${data}`);
                 
-                // also emit a message to sender himself
-                socket.emit('msg', `${socket.id}: ${data}` );
+                // emit a message to sender himself also    
+                socket.emit('msg', `${nickname} (${socket.id}): ${data}` );
             });
 
             // user connection lost

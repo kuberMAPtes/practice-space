@@ -1,3 +1,5 @@
+// npm install react-use-websocket;
+
 import React from 'react';
 import {useEffect, useState, useCallback} from 'react';
 import useWebSocket from 'react-use-websocket';

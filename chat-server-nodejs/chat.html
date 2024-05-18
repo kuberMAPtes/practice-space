@@ -14,17 +14,20 @@
             const input = document.getElementById("input");
             const messages = document.getElementById("messages");
 
-            socket.on("connect", () => {
-                console.log("Connected to server");
+            // connect to socket.server
+            socket.on("connect", (socket) => {
+                console.log("Connected to server"); 
             });
 
+            // receive a message from socket server
             socket.on("msg", (message) => {
                 const item = document.createElement("li");
                 item.textContent = message;
                 messages.appendChild(item);
                 window.scrollTo(0, document.body.scrollHeight);
             });
-
+            
+            // send a chat to socket server
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
                 if (input.value) {
@@ -32,6 +35,17 @@
                     input.value = "";
                 }
             });
+
+            // change his nickname 
+            const nickname_form = document.getElementById("nickname");
+            const nickname_input = document.getElementById("nickname_input");    
+
+            nickname_form.addEventListener("submit", (e) => {
+                e.preventDefault();
+                if(nickname_input){
+                    socket.emit("nickname", nickname_input.value)
+                }
+            })
         });
     </script>
 
@@ -46,5 +60,16 @@
         <input id="input" autocomplete="off" /><button>Send</button>
     </form>
     
+    <form id="nickname" action="">
+        <input id="nickname_input" autocomplete="off" /><button>닉네임 변경</button>
+    </form>
+
+    <br/><br/><br/>
+    -----------------------------
+    <h3>개발 history</h3>
+    24.5.17(금) - 1:1 채팅기능 구현<br/>
+    24.5.18(토) - 닉네임 변경기능 구현<br/>
+    -----------------------------
+
 </body>
 </html>
