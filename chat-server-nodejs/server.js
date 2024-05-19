@@ -20,6 +20,14 @@
 
             console.log(socket.id, ' connected...');
 
+            // show entire chat room member and number
+            const roomInfo = {
+                size: socket.adapter.rooms.size, 
+                rooms: socket.adapter.rooms
+            }
+            console.log(roomInfo);
+            socket.emit('room_info', roomInfo);
+
             // receive a nickname changed
             var nickname = 'NEWBIE';
 
@@ -38,13 +46,14 @@
             });
 
             // broadcasting a entering message to everyone who is in the chatroom
-            io.emit('msg', `NEWBIE (${socket.id}) has entered the chatroom. `);
-        
+            io.emit('msg', `NEWBIE (${socket.id}) has entered the chatroom. (입장시간 : ${socket.handshake.time}))`)
+
+            
             // message receives
             socket.on('msg', function (data) {
                 console.log(socket.id,': ', data);
                 // broadcasting a message to everyone except for the sender
-                socket.broadcast.emit('msg', `${socket.id}: ${data}`);
+                socket.broadcast.emit('msg', `${nickname} (${socket.id}: ${data}`);
                 
                 // emit a message to sender himself also    
                 socket.emit('msg', `${nickname} (${socket.id}): ${data}` );

@@ -1,75 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const socket = io({ path: '/socket.io' });
+      document.addEventListener("DOMContentLoaded", () => {
+        const socket = io({ path: "/socket.io" });
 
-            const form = document.getElementById("form");
-            const input = document.getElementById("input");
-            const messages = document.getElementById("messages");
+        const form = document.getElementById("form");
+        const input = document.getElementById("input");
+        const messages = document.getElementById("messages");
 
-            // connect to socket.server
-            socket.on("connect", (socket) => {
-                console.log("Connected to server"); 
-            });
-
-            // receive a message from socket server
-            socket.on("msg", (message) => {
-                const item = document.createElement("li");
-                item.textContent = message;
-                messages.appendChild(item);
-                window.scrollTo(0, document.body.scrollHeight);
-            });
-            
-            // send a chat to socket server
-            form.addEventListener("submit", (e) => {
-                e.preventDefault();
-                if (input.value) {
-                    socket.emit("msg", input.value);
-                    input.value = "";
-                }
-            });
-
-            // change his nickname 
-            const nickname_form = document.getElementById("nickname");
-            const nickname_input = document.getElementById("nickname_input");    
-
-            nickname_form.addEventListener("submit", (e) => {
-                e.preventDefault();
-                if(nickname_input){
-                    socket.emit("nickname", nickname_input.value)
-                }
-            })
+        // connect to socket.server
+        socket.on("connect", (socket) => {
+          console.log("Connected to server");
         });
-    </script>
 
-</head>
-<body>
+        // receive a message from socket server
+        socket.on("msg", (message) => {
+          const item = document.createElement("li");
+          item.textContent = message;
+          messages.appendChild(item);
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        // send a chat to socket server
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          if (input.value) {
+            socket.emit("msg", input.value);
+            input.value = "";
+          }
+        });
+
+        // change your nickname
+        const nickname_form = document.getElementById("nickname");
+        const nickname_input = document.getElementById("nickname_input");
+
+        nickname_form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          if (nickname_input) {
+            socket.emit("nickname", nickname_input.value);
+          }
+        });
+
+        // show participating chat person number
+        const room_personnel = document.getElementById("room_personnel");
+        socket.on("room_info", (roomInfo)=>{
+            console.log("roomInfo.size", roomInfo.size);
+            console.log("roomInfo.rooms", roomInfo.rooms);
+            room_personnel.append(`(${roomInfo.size})`);
+
+            ///////////////////////////여기서부터 해야함//////////////////
+            roomInfo.rooms.forEach((user)=>{
+                var room_person = document.createElement("li")
+                var textNode = document.createTextNode(user)
+                room_person.append(textNode);
+                room_personnel.appendChild(room_person);
+            })
+        })
+
+      });
+    </script>
+  </head>
+  <body>
     <!-- <h3>chat-server-nodejs에서 뿌리는 chat.html 에옹 (프론트)</h3> -->
-    <h1> 쿠버맵티스 채팅방이에용 </h1>
-    <br/>
+    <h1>쿠버맵티스 채팅방이에용</h1>
+    <br />
+
+    <ul id="room_personnel">채팅 참여 인원 </ul>
 
     <ul id="messages"></ul>
     <form id="form" action="">
-        <input id="input" autocomplete="off" /><button>Send</button>
-    </form>
-    
-    <form id="nickname" action="">
-        <input id="nickname_input" autocomplete="off" /><button>닉네임 변경</button>
+      <input id="input" autocomplete="off" /><button>Send</button>
     </form>
 
-    <br/><br/><br/>
+    <form id="nickname" action="">
+      <input id="nickname_input" autocomplete="off" /><button>
+        닉네임 변경
+      </button>
+    </form>
+
+    <br /><br /><br />
     -----------------------------
     <h3>개발 history</h3>
-    24.5.17(금) - 1:1 채팅기능 구현<br/>
-    24.5.18(토) - 닉네임 변경기능 구현<br/>
+    24.5.17(금) - 1:1 채팅기능 구현 (완료) <br/>
+    24.5.18(토) - 닉네임 변경기능 (완료) <br/>
+    24.5.18(토) - 채팅방 인원 수 표시, 최초 채팅방 접속일자 표시 (완료) <br/>
+    (개념, 코드 gitghub) <br/>
+    24.5.19(일) - 채팅방 접속자 표시, 채팅별 전송일자 표시 (진행중) <br/>
+    24.5.19(일) - 채팅방 따로 파기 (예정) <br/>
+    24.5.20(월) - 채팅내용 몽고DB 저장하기 <br/>
     -----------------------------
-
-</body>
+  </body>
 </html>
