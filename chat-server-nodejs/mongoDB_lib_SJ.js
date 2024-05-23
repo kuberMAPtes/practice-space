@@ -32,27 +32,32 @@ async function mongooseSetup(){
     return ModelChat;
 }
 
-async function mongooseRead(ModelChat, chat){
+async function mongooseReadOne(ModelChat, search){
     // 9. 특정 데이터 조회
     try {
-        const searchedChat = await ModelChat.findOne(chat);
+        console.log("디버깅 -> 검색조건", search);
+        const searchedChat = await ModelChat.findOne(search);
         console.log('Chat found:', searchedChat);
+
+        return searchedChat;
+
         } catch (err) {
         console.error(err);
         }
 }
 
-async function mongooseReadAll(ModelChat){
+async function mongooseReadAll(ModelChat, search){
     // 10. 전체 데이터 조회
     try {
-        const allChat = await ModelChat.find();
-        console.log('Chats found:', allChat);
-        
-        return allChat;
+        console.log("디버깅 -> mongooseReadAll 검색조건", search);
+        const searchedChats = await ModelChat.find(search);
+        console.log('Chats found number:', searchedChats.length);
 
-    } catch (err) {
+        return searchedChats;
+
+        } catch (err) {
         console.error(err);
-    }
+        }
 }
 
 async function mongooseWrite(ModelChat,chat){
@@ -94,7 +99,7 @@ async function mongooseDelete(ModelChat){
 module.exports = {
     mongooseSetup,
     mongooseWrite,
-    mongooseRead,
+    mongooseReadOne,
     mongooseReadAll,
     mongooseUpdate,
     mongooseDelete

@@ -3,11 +3,11 @@
 //npm install express 
 //npm install socket.io
 
-// 몽고 DB 접속
+// 몽고 DB 연결
 var mongoose = require('mongoose');
-const mongooseFunctionSJ = require('./mongoDB_test');
+const mongooseFunctionSJ = require('./mongoDB_lib_SJ');
 
-var modelChat;
+var modelChat; // 모델(=테이블?)임
 async function initialSetting(){
     modelChat = await mongooseFunctionSJ.mongooseSetup();
 }
@@ -18,7 +18,7 @@ initialSetting();
 async function temp(){
 
 await mongooseFunctionSJ.mongooseWrite(modelChat, chat);
-await mongooseFunctionSJ.mongooseRead(modelChat, chat);
+await mongooseFunctionSJ.mongooseReadOne(modelChat, chat);
 await mongooseFunctionSJ.mongooseReadAll(modelChat);
 await mongooseFunctionSJ.mongooseUpdate(modelChat, chat);
 await mongooseFunctionSJ.mongooseDelete(modelChat, chat);
@@ -101,25 +101,50 @@ io.on('connection', async function (socket) {
     });
 });
 
-// /chat 으로 들어올 경우 client-server-nodejs 에서 html 뿌려줌
+// (HTTP) /chat 으로 들어올 경우 client-server-nodejs 에서 html 뿌려줌
 app.get('/chat', function(req, res) {
     res.sendFile(__dirname + '/chat.html');
 });
 
-// /react 으로 들어올 경우 client-server에서 리액트로만든 html 뿌려줌
+// (HTTP) /react 으로 들어올 경우 client-server에서 리액트로만든 html 뿌려줌
 var path = require('path');
 
 app.get('/react', function(req, res) {
     res.sendFile(path.resolve('../client-server/build/index.html'));
 });
 
-// 채팅내용 조회
-app.get('/api/chats', async (req, res) => {
+// (HTTP) /api/chatsSearch 으로 들어올 경우 조건에 맞는 채팅내용 조회 (쿼리 파라미터 없으면 전체조회)
+app.get('/api/chatSearch', async (req, res) => {
+
+    const search ={};
+    const { searchCondition, searchTerm } = req.query;
+
+    console.log("req.query",req.query);
+
+    if(searchCondition == 'chatNickname'){
+        search.nickname = searchTerm;
+    } 
+    else if(searchCondition == 'chatDate'){
+        search.time = searchTerm;
+    }
+    else if(searchCondition == 'chatMsg'){
+        search.chatMsg = searchTerm;
+    }else {
+        search.zz=null;
+    }
+
+    console.log("디버깅 -> server.js 검색조건",search);
+
     try {
-        const chatHistory = await mongooseFunctionSJ.mongooseReadAll(modelChat);
-        console.log("채팅보낼게요", chatHistory);
-        res.json(chatHistory);
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching chat history' });
+        const searchedChatHistory = await mongooseFunctionSJ.mongooseReadAll(modelChat, search);
+        console.log("필터링한 채팅내보낼게요");
+        res.json(searchedChatHistory);
+    //res.send(`${searchCondition} ${searchTerm} 으로 검색한 결과 출력하겠습니다. <br/><br/> ${searchedChat}`);
+    } catch (error){
+        res.status(500).json({ error: 'Error fetching chat history' })
     }
 });
+
+
+
+// 두 미들서버 합칠 수 있을듯
