@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -21,7 +20,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Repository
@@ -34,13 +32,11 @@ public class NaverMapsPlacesRepository implements PlacesRepository {
     private final String accessKey;
     private final String secretKey;
     private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
 
     public NaverMapsPlacesRepository(@Value("${naver-cloud.maps.access-key}") String accessKey, @Value("${naver-cloud.maps.secret-key}") String secretKey) {
         this.accessKey = accessKey;
         this.secretKey = secretKey;
         this.restTemplate = new RestTemplate();
-        this.objectMapper = new ObjectMapper();
     }
 
     @Override

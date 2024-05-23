@@ -2,13 +2,18 @@ package team.kubermaptes;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import team.kubermaptes.config.ContextConfig;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
-@SpringBootApplication(scanBasePackageClasses = ContextConfig.class)
+@SpringBootApplication
 public class PracticeSpaceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PracticeSpaceApplication.class, args);
 	}
 
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
 }
