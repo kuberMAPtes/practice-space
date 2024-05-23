@@ -73,6 +73,13 @@
 			<groupId>io.projectreactor</groupId>
 			<artifactId>reactor-core</artifactId>
 		</dependency>
+
+<!--		COOL SMS -->
+		<dependency>
+			<groupId>net.nurigo</groupId>
+			<artifactId>sdk</artifactId>
+			<version>4.2.7</version>
+		</dependency>
 	</dependencies>
 
 	<build>
