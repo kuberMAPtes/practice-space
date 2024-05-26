@@ -3,6 +3,7 @@ package team.kubermaptes.places.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.kubermaptes.places.dto.PlaceDto;
+import team.kubermaptes.places.exception.PlaceNotFoundException;
 import team.kubermaptes.places.repository.PlacesRepository;
 import team.kubermaptes.places.service.PlacesService;
 
@@ -19,5 +20,10 @@ public class PlacesServiceImpl implements PlacesService {
         return this.placesRepository.findByPlaceName(placeName)
                 .stream().map(PlaceDto::from)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PlaceDto findPlaceByLatLng(double latitude, double longitude) throws PlaceNotFoundException {
+        return PlaceDto.from(this.placesRepository.findByLatLng(latitude, longitude));
     }
 }
