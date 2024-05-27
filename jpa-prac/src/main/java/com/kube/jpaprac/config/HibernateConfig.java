@@ -1,5 +1,6 @@
 package com.kube.jpaprac.config;
 
+import com.kube.jpaprac.domain.Feed;
 import com.kube.jpaprac.domain.Member;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ public class HibernateConfig {
     public SessionFactory sessionFactory() {
         return new org.hibernate.cfg.Configuration().configure("hibernate/hibernate-config.xml")
                 .addAnnotatedClass(Member.class)
+                .addAnnotatedClass(Feed.class)
                 .buildSessionFactory();
     }
 }

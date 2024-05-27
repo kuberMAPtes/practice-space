@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -25,4 +26,11 @@ public class Member {
 
     @Column(name = "reg_date")
     private LocalDate regDate;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+//            , mappedBy = "writer"
+    )
+    @JoinColumn(name = "writer")
+    private List<Feed> feeds;
 }
