@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS feed;
-
 DROP TABLE IF EXISTS comment CASCADE;
+
+DROP TABLE IF EXISTS feed CASCADE;
 
 DROP TABLe IF EXISTS member;
 
@@ -9,11 +9,15 @@ CREATE TABLE member (
     member_name VARCHAR(255) NOT NULL
 );
 
+ALTER TABLE member ADD COLUMN reg_date DATETIME AFTER member_name;
+
 CREATE TABLE feed (
     feed_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     content VARCHAR(255) DEFAULT ''
 );
+
+ALTER TABLE feed AUTO_INCREMENT = 10000;
 
 CREATE TABLE comment (
     tag_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -23,3 +27,5 @@ CREATE TABLE comment (
     CONSTRAINT register_fk FOREIGN KEY (register) REFERENCES member (member_id),
     CONSTRAINT feed_kf FOREIGN KEY (feed_id) REFERENCES feed (feed_id)
 );
+
+ALTER TABLE comment AUTO_INCREMENT = 10000;

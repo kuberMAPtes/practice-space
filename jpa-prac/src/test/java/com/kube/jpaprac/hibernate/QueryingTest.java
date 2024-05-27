@@ -1,4 +1,4 @@
-package com.kube.jpaprac.querying;
+package com.kube.jpaprac.hibernate;
 
 import com.kube.jpaprac.config.HibernateConfig;
 import com.kube.jpaprac.domain.Member;

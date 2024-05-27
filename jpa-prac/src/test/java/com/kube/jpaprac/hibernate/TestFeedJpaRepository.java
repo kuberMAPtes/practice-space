@@ -1,4 +1,4 @@
-package com.kube.jpaprac.repository;
+package com.kube.jpaprac.hibernate;
 
 import com.kube.jpaprac.domain.Member;
 import org.hibernate.Session;
