@@ -1,0 +1,25 @@
+DROP TABLE IF EXISTS feed;
+
+DROP TABLE IF EXISTS comment CASCADE;
+
+DROP TABLe IF EXISTS member;
+
+CREATE TABLE member (
+    member_id VARCHAR(255) NOT NULL PRIMARY KEY,
+    member_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE feed (
+    feed_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content VARCHAR(255) DEFAULT ''
+);
+
+CREATE TABLE comment (
+    tag_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    content VARCHAR(255) NOT NULL,
+    register VARCHAR(255) NOT NULL,
+    feed_id BIGINT NOT NULL,
+    CONSTRAINT register_fk FOREIGN KEY (register) REFERENCES member (member_id),
+    CONSTRAINT feed_kf FOREIGN KEY (feed_id) REFERENCES feed (feed_id)
+);
