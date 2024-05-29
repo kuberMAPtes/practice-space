@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "feeds")
 @Entity
 @Table(name = "member")
 public class Member {

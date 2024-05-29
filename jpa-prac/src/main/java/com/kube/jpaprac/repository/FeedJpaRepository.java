@@ -1,31 +1,19 @@
 package com.kube.jpaprac.repository;
 
 import com.kube.jpaprac.domain.Feed;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public class FeedJpaRepository implements FeedRepository {
+import java.util.List;
 
-    @Override
-    public Feed save(Feed feed) {
-        return null;
-    }
+public interface FeedJpaRepository extends JpaRepository<Feed, Long> {
 
-    @Override
-    public void update(FeedDto feedDto) {
+    List<Feed> findFeedByTitleLike(String title);
 
-    }
+    int countByTitleLike(String title);
 
-    @Override
-    public Feed findById(Long id) {
-        return null;
-    }
-
-    @Override
-    public Feed findByTitleLike(String title) {
-        return null;
-    }
-
-    @Override
-    public void deleteById(Long id) {
-
-    }
+    @Query("""
+            SELECT f FROM Feed f WHERE f.title LIKE :title OR f.content = :content
+            """)
+    List<Feed> findFeedCustom(String title, String content);
 }
