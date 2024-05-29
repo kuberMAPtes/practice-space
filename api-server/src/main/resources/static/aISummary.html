@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+    <script>
+        $(function() {
+
+            $('#reqBtn').on("click", function () {
+                var inputText = $('#InputText').val();
+                $.ajax({
+                    url: "http://localhost:8080/AISummary/NewsSummary/" + inputText,
+                    method: "GET",
+                    success: function (responseData, status) {
+                        alert(responseData);
+                        $('#output').text(responseData);
+                    }
+                });///end of ajax
+            });
+
+        });///end of function
+    </script>
+    <style>
+        #output {
+            width: 90%;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+<h1>아래에 텍스트를 입력하면 요약해줄게옹</h1>
+<input type="text" id="InputText" placeholder="요약할 글을 여기에">
+<button id="reqBtn">summaryReq</button>
+<br/>
+<textarea id="output" readonly></textarea>
+</body>
+</html>
