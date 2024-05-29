@@ -3,6 +3,8 @@ package com.kube.jpaprac.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -21,6 +23,14 @@ public class Feed {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "writer")
     private Member writer;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "bookmark",
+            joinColumns = @JoinColumn(name = "feed_id"),
+            inverseJoinColumns = @JoinColumn(name = "member_id")
+    )
+    private List<Member> bookmarkedMembers;
 
     public Feed(String title, String content, Member writer) {
         this.title = title;

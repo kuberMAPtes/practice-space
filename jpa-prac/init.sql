@@ -23,6 +23,13 @@ ALTER TABLE feed ADD COLUMN writer VARCHAR(255) NOT NULL AFTER content;
 
 ALTER TABLE feed ADD CONSTRAINT writer_fk FOREIGN KEY (writer) REFERENCES member (member_id);
 
+CREATE TABLE bookmark (
+    member_id VARCHAR(255) NOT NULL,
+    feed_id BIGINT NOT NULL,
+    CONSTRAINT member_id_fk FOREIGN KEY (member_id) REFERENCES member (member_id),
+    CONSTRAINT feed_id_fk FOREIGN KEY (feed_id) REFERENCES feed (feed_id)
+);
+
 CREATE TABLE comment (
     tag_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     content VARCHAR(255) NOT NULL,

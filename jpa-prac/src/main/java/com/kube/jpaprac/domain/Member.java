@@ -33,4 +33,12 @@ public class Member {
     )
     @JoinColumn(name = "writer")
     private List<Feed> feeds;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "bookmark",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "feed_id")
+    )
+    private List<Feed> bookmarks;
 }
