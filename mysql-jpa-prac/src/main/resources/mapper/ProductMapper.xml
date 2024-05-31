@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mysqljpaprac.sample.repository.ProductMapper">
+    <insert id="save" useGeneratedKeys="true" keyProperty="prodId" keyColumn="prod_id">
+        INSERT INTO product (prod_name, prod_detail)
+        VALUES (#{prodName}, #{prodDetail})
+    </insert>
+
+    <select id="findById" resultType="Product">
+        SELECT prod_id, prod_name, prod_detail
+        FROM product
+        WHERE prod_id = #{id}
+    </select>
+</mapper>
