@@ -1,14 +1,20 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 export default function Maps() {
-    useEffect(() => {
-        const mapDiv = document.getElementById("map");
-        const map = new window.naver.maps.Map(mapDiv);
-    }, []);
+    const [txt, setTxt] = useState();
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            setTxt("Latitude: " + position.coords.latitude + "\nLongitude: " + position.coords.longitude);
+        },
+        () => {
+            setTxt("Geolocation is not available");
+        }
+    )
+
+    useEffect(() => {}, []);
 
     return (
-        <div>
-            <div id="map" style={{width: "400px", height: "400px"}} />
-        </div>
+        <div>{txt}</div>
     );
 }
